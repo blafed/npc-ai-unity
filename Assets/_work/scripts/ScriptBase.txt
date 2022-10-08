@@ -1,0 +1,83 @@
+using UnityEngine;
+using UnityEngine.AI;
+public class ScriptBase : MonoBehaviour
+{
+    [Header("Objects")]
+    public GameObject projectile;
+
+    [Header("Paramters")]
+    public float walk_around_radius = 5f,
+    walk_around_speed = 2.5f,
+    walk_around_randomness = 0.3f;
+
+    [Header("Animation")]
+    public Material[] _hat_mats;
+    public MeshRenderer hatRenderer;
+
+    [Header("Data")]
+    public bool isAttacked;
+
+    NavMeshAgent agent;
+
+
+    MindType? __lastType;
+    bool _isLookingAt;
+    Vector3 _lookAtPoint;
+
+
+    private void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+
+    }
+
+
+    void _setAnimation(MindType t)
+    {
+        if (__lastType != t)
+            hatRenderer.material = this._hat_mats[(int)t)]
+        __lastType = t;
+    }
+
+
+
+    public Vector3 randomAroundPoint()
+    {
+        var p = Random.insideUnitSphere;
+        p.y = 0;
+        p *= walk_around_radius;
+        p *= (Random.Range(-1, 1) * walk_around_randomness + 1);
+        return p;
+    }
+
+    public void doRandomMovement()
+    {
+        var rand = randomAroundPoint();
+        agent.SetDestination(rand);
+    }
+    public void lookAt(Vector3 point)
+    {
+        _lookAtPoint = point;
+        _isLookingAt = true;
+    }
+    public void attack()
+    {
+        Instantiate(projectile);
+    }
+
+
+
+
+    private void FixedUpdate()
+    {
+        if (_isLookingAt)
+        {
+
+        }
+        cycle(Time.fixedDeltaTime);
+    }
+
+
+
+    public virtual void cycle(float dt) { }
+}
