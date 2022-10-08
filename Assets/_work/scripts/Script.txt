@@ -1,0 +1,15 @@
+using UnityEngine;
+
+public class Script : ScriptBase
+{
+    public override void cycle(float dt)
+    {
+        if (is_idle && !moving)
+        {
+            wait(1);
+            doRandomMovement();
+        }else if(is_attacked){
+            
+        }
+    }
+}
